@@ -1,6 +1,7 @@
 model Users {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String
+  email      String   @unique
   birth_date DateTime
   cpf        String
   phone      String
@@ -10,7 +11,7 @@ model Users {
 
   pius Pius[]
 
-  @@map("Users")
+  @@map("users")
 }
 
 model Pius {

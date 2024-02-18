@@ -35,14 +35,13 @@ export default class CreateUserService {
   public async execute({
     cpf, email, name, password, phone, birth_date,
   }: IRequest): Promise<Users> {
-    const userAlreadyExists = await this.usersRepository.findByEmailPhoneOrCpf(email, phone, cpf);
+    const userAlreadyExists = await this.usersRepository.findByEmailWithRelations(email);
 
     if (userAlreadyExists) throw new AppError('User with same name, phone or cpf already exists');
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     const userDate = startOfHour(birth_date);
-
     const user = this.usersRepository.create({
       name,
       email: email.toLowerCase(),
