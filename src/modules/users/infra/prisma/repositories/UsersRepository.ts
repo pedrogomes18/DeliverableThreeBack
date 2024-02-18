@@ -11,6 +11,11 @@ export default class UsersRepository implements IUsersRepository {
     this.ormRepository = prisma.users;
   }
 
+  public async getAll(): Promise<Users[]> {
+    const users = await this.ormRepository.findMany();
+    return users;
+  }
+
   public async findByEmailWithRelations(email: string): Promise<Users | null> {
     const user = await this.ormRepository.findFirst({
       where: { email },

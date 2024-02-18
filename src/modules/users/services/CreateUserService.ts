@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import path from 'path';
+import { startOfHour } from 'date-fns';
 
 import { Users } from '@prisma/client';
 
@@ -15,6 +16,7 @@ interface IRequest {
   cpf: string;
   phone: string;
   password: string;
+  birth_date: Date
 }
 
 @injectable()
@@ -31,7 +33,7 @@ export default class CreateUserService {
   ) { }
 
   public async execute({
-    cpf, email, name, password, phone,
+    cpf, email, name, password, phone, birth_date,
   }: IRequest): Promise<Users> {
     const userAlreadyExists = await this.usersRepository.findByEmailPhoneOrCpf(email, phone, cpf);
 
@@ -39,12 +41,15 @@ export default class CreateUserService {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
+    const userDate = startOfHour(birth_date);
+
     const user = this.usersRepository.create({
       name,
       email: email.toLowerCase(),
       cpf,
       password: hashedPassword,
       phone,
+      birth_date: userDate,
     });
 
     const templateDataFile = path.resolve(__dirname, '..', 'views', 'create_account.hbs');

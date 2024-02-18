@@ -1,10 +1,20 @@
 model Users {
   id         String   @id @default(uuid())
   name       String   @unique
-  email      String
+  birth_date DateTime
   cpf        String
   phone      String
   password   String
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  pius Pius[]
+
+  @@map("Users")
+}
+
+model Pius {
+  id       String @id @default(uuid())
+  user_id  String
+  provider Users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
