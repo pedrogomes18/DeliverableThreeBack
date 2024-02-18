@@ -7,6 +7,7 @@ interface IUsersRepository {
   findByEmailPhoneOrCpf(email: string, phone: string, cpf: string): Promise<Users | null>;
   create(data: ICreateUserDTO): Promise<Users>;
   getAll(): Promise<Users[]>
+  getUserById(idUser:string): Promise<Users>
 }
 
 export default IUsersRepository;
