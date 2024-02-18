@@ -32,6 +32,11 @@ export default class UserController {
       password,
     } = req.body;
 
+    // Verifica se algum dos campos obrigatórios está vazio
+    if (!name || !email || !birth_date || !cpf || !phone || !password) {
+      return res.status(400).json({ error: 'All fields are mandatory' });
+    }
+
     const parsedDate = parseISO(birth_date);
 
     const createUser = container.resolve(CreateUserService);
