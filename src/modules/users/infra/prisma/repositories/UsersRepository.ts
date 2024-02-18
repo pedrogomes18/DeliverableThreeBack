@@ -59,4 +59,18 @@ export default class UsersRepository implements IUsersRepository {
 
     return user;
   }
+
+  public async update(idUser: string, data: Partial<ICreateUserDTO>): Promise<Users | null> {
+    const newData: Partial<ICreateUserDTO> = { ...data };
+    if (newData.birth_date) {
+      newData.birth_date = new Date(newData.birth_date); // Converter a string para um objeto Date
+    }
+
+    const user = await this.ormRepository.update({
+      where: { id: idUser },
+      data: newData,
+    });
+
+    return user;
+  }
 }
